@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BRAIN ROT SUMITS COACHING</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+            line-height: 1.6;
+            padding: 10px;
+        }
+        
+        .header {
+            background-color: #4267B2;
+            color: white;
+            text-align: center;
+            padding: 15px 10px;
+            border-radius: 8px 8px 0 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+        
+        .header p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            padding: 10px;
+            background-color: #f5f5f5;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 8px 12px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        button:hover {
+            background-color: #45a049;
+        }
+        
+        button:active {
+            transform: translateY(1px);
+        }
+        
+        .mindmap-container {
+            padding: 15px;
+        }
+        
+        .tree-node {
+            margin: 5px 0;
+        }
+        
+        .node-header {
+            display: flex;
+            align-items: center;
+            border-radius: 6px;
+            padding: 8px 12px;
+            margin-bottom: 5px;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+        
+        .node-header:hover {
+            box-shadow: 0 2px 5px rgba(0,0,0,0.12);
+        }
+        
+        .node-header.main-node {
+            background-color: #ff99cc;
+            border-left: 4px solid #cc0066;
+        }
+        
+        .node-header.controller-node {
+            background-color: #bbbbff;
+            border-left: 4px solid #3333ff;
+        }
+        
+        .node-header.category-node {
+            background-color: #bbffbb;
+            border-left: 4px solid #339933;
+        }
+        
+        .node-header.detail-node {
+            background-color: #ddffdd;
+            border-left: 4px solid #339933;
+        }
+        
+        .node-text {
+            flex-grow: 1;
+            font-weight: 500;
+        }
+        
+        .main-node .node-text {
+            font-weight: 700;
+            text-align: center;
+        }
+        
+        .toggle-icon {
+            margin-right: 10px;
+            width: 20px;
+            height: 20px;
+            text-align: center;
+            line-height: 20px;
+            font-weight: bold;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .tree-children {
+            margin-left: 20px;
+            position: relative;
+            padding-left: 15px;
+            border-left: 1px dashed #ccc;
+            overflow: hidden;
+            max-height: 2000px;
+            transition: max-height 0.3s ease-out;
+        }
+        
+        .tree-node.collapsed > .tree-children {
+            max-height: 0;
+        }
+        
+        .info-section {
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-top: 1px solid #e0e0e0;
+            font-size: 0.9rem;
+        }
+        
+        .info-section h3 {
+            margin-bottom: 10px;
+            color: #4267B2;
+        }
+        
+        .info-section p {
+            margin-bottom: 10px;
+        }
+        
+        .sharing-options {
+            margin-top: 15px;
+        }
+        
+        .share-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px 12px;
+            background-color: #25D366;
+            color: white;
+            border-radius: 4px;
+            text-decoration: none;
+            margin-right: 10px;
+            font-weight: 500;
+        }
+        
+        .whatsapp-icon {
+            margin-right: 5px;
+            font-size: 1.2rem;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 15px;
+            color: #666;
+            font-size: 0.8rem;
+            border-top: 1px solid #e0e0e0;
+        }
+        
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 1.3rem;
+            }
+            
+            .node-header {
+                padding: 8px;
+            }
+            
+            .tree-children {
+                margin-left: 10px;
+                padding-left: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>BRAIN ROT SUMITS COACHING</h1>
+            <p>Interactive mindmap based on 21 sources</p>
+        </div>
+        
+        <div class="controls">
+            <button id="expand-all">Expand All</button>
+            <button id="collapse-all">Collapse All</button>
+            <button id="reset">Reset View</button>
+        </div>
+        
+        <div class="mindmap-container" id="mindmap-root">
+            <!-- The mindmap will be generated here -->
+        </div>
+        
+        <div class="info-section">
+            <h3>How to Use This Mindmap</h3>
+            <p>• Tap on any node or the + / - icons to expand or collapse</p>
+            <p>• Use the buttons at the top to control all nodes at once</p>
+            <p>• This interactive mindmap works on any device</p>
+            
+            <div class="sharing-options">
+                <a href="#" class="share-button" id="whatsapp-share">
+                    <span class="whatsapp-icon">📱</span> Share on WhatsApp
+                </a>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>Created with HTML, CSS and JavaScript &copy; 2025</p>
+        </div>
+    </div>
+
+    <script>
+        // Define the mindmap data structure
+        const mindmapData = {
+            id: 'main',
+            text: 'Microcontroller Concepts (8051 and 8085) - The Skibidi Mog Edition',
+            class: 'main-node',
+            children: [
+                {
+                    id: 'controller',
+                    text: '8051 Microcontroller - The Baller Controller',
+                    class: 'controller-node',
+                    children: [
+                        {
+                            id: 'arch8051',
+                            text: 'Architecture (Brainrot Basics)',
+                            class: 'category-node',
+                            children: [
+                                { id: 'arch8051d1', text: '8-bit CPU - The brain’s lil’ baller core', class: 'detail-node' },
+                                { id: 'arch8051d2', text: 'Harvard Architecture - Separate instruction & data buses, no brainrot here!', class: 'detail-node' },
+                                { id: 'arch8051d3', text: 'CISC Design - Complex instructions for baller moves', class: 'detail-node' },
+                                { id: 'arch8051d4', text: 'Single-chip Computer - All-in-one skibidi mog package', class: 'detail-node' }
+                            ]
+                        },
+                        {
+                            id: 'inst8051',
+                            text: 'Instruction Set (The Skibidi Moves)',
+                            class: 'category-node',
+                            children: [
+                                { id: 'inst8051d1', text: '111 Instructions - Enough baller moves to impress', class: 'detail-node' },
+                                { id: 'inst8051d2', text: 'Data Transfer Instructions - Pass the ball like a pro', class: 'detail-node' },
+                                { id: 'inst8051d3', text: 'Arithmetic Instructions - Brainrot math magic', class: 'detail-node' },
+                                { id: 'inst8051d4', text: 'Logical Instructions - Skibidi logic for decisions', class: 'detail-node' },
+                                { id: 'inst8051d5', text: 'Branching Instructions - Choose your baller path', class: 'detail-node' }
+                            ]
+                        },
+                        {
+                            id: 'mem8051',
+                            text: 'Memory Organization (Brainrot Storage)',
+                            class: 'category-node',
+                            children: [
+                                { id: 'mem8051d1', text: '4KB ROM - Where baller programs chill', class: 'detail-node' },
+                                { id: 'mem8051d2', text: '128 bytes RAM - Quick brainrot scratchpad', class: 'detail-node' },
+                                { id: 'mem8051d3', text: '4 Register Banks - Skibidi mog registers for fast access', class: 'detail-node' },
+                                { id: 'mem8051d4', text: 'Bit-addressable RAM - Tiny baller bits at your command', class: 'detail-node' }
+                            ]
+                        },
+                        {
+                            id: 'int8051',
+                            text: 'Interrupts (Baller Alerts)',
+                            class: 'category-node',
+                            children: [
+                                { id: 'int8051d1', text: '5 Interrupt Sources - When skibidi mog calls, you answer', class: 'detail-node' },
+                                { id: 'int8051d2', text: '2 External Interrupts - Outside baller signals', class: 'detail-node' },
+                                { id: 'int8051d3', text: '2 Timer Interrupts - Timing is everything, no brainrot delay', class: 'detail-node' },
+                                { id: 'int8051d4', text: '1 Serial Interrupt - Baller communication line', class: 'detail-node' },
+                                { id: 'int8051d5', text: '2 Priority Levels - Who’s the baller boss?', class: 'detail-node' }
+                            ]
+                        },
+                        {
+                            id: 'timer8051',
+                            text: 'Timers/Counters (Skibidi Timekeepers)',
+                            class: 'category-node',
+                            children: [
+                                { id: 'timer8051d1', text: 'Timer 0 and Timer 1 - Dual baller timers', class: 'detail-node' },
+                                { id: 'timer8051d2', text: '16-bit Counters - Count like a baller', class: 'detail-node' },
+                                { id: 'timer8051d3', text: '4 Operating Modes - Flex your baller style', class: 'detail-node' }
+                            ]
+                        },
+                        {
+                            id: 'serial8051',
+                            text: 'Serial Communication (Baller Chat)',
+                            class: 'category-node',
+                            children: [
+                                { id: 'serial8051d1', text: 'UART Interface - Skibidi mog talk channel', class: 'detail-node' },
+                                { id: 'serial8051d2', text: 'Full Duplex - Talk and listen like a baller', class: 'detail-node' },
+                                { id: 'serial8051d3', text: 'Programmable Baud Rate - Speed it up, slow it down', class: 'detail-node' }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    id: 'processor',
+                    text: '8085 Microprocessor - The Brainrot Processor',
+                    class: 'controller-node',
+                    children: [
+                        {
+                            id: 'arch8085',
+                            text: 'Architecture (Baller Brain Setup)',
+                            class: 'category-node',
+                            children: [
+                                { id: 'arch8085d1', text: '8-bit Processor - Brainrot core power', class: 'detail-node' },
+                                { id: 'arch8085d2', text: 'Von Neumann Architecture - Shared memory for baller flow', class: 'detail-node' },
+                                { id: 'arch8085d3', text: '16-bit Address Bus - Big baller address space', class: 'detail-node' },
+                                { id: 'arch8085d4', text: '8-bit Data Bus - Skibidi data highway', class: 'detail-node' },
+                                { id: 'arch8085d5', text: '6 General Purpose Registers - Baller registers ready to roll', class: 'detail-node' }
+                            ]
+                        },
+                        {
+                            id: 'inst8085',
+                            text: 'Instruction Set (Brainrot Moves)',
+                            class: 'category-node',
+                            children: [
+                                { id: 'inst8085d1', text: '74 Instructions - Skibidi baller commands', class: 'detail-node' },
+                                { id: 'inst8085d2', text: '246 Opcodes - Brainrot variety pack', class: 'detail-node' },
+                                { id: 'inst8085d3', text: 'Data Transfer Group - Move that baller data', class: 'detail-node' },
+                                { id: 'inst8085d4', text: 'Arithmetic Group - Brainrot math skills', class: 'detail-node' },
+                                { id: 'inst8085d5', text: 'Logical Group - Skibidi logic tricks', class: 'detail-node' },
+                                { id: 'inst8085d6', text: 'Branch Group - Choose your baller path', class: 'detail-node' },
+                                { id: 'inst8085d7', text: 'Stack, I/O & Machine Control - Brainrot control center', class: 'detail-node' }
+                            ]
+                        },
+                        {
+                            id: 'flags8085',
+                            text: 'Flags (Program Status Word) - Baller Status',
+                            class: 'category-node',
+                            children: [
+                                { id: 'flags8085d1', text: 'Sign Flag (S) - Positive or brainrot negative?', class: 'detail-node' },
+                                { id: 'flags8085d2', text: 'Zero Flag (Z) - Is the baller zeroed out?', class: 'detail-node' },
+                                { id: 'flags8085d3', text: 'Auxiliary Carry Flag (AC) - Skibidi half-carry baller', class: 'detail-node' },
+                                { id: 'flags8085d4', text: 'Parity Flag (P) - Even or odd baller check', class: 'detail-node' },
+                                { id: 'flags8085d5', text: 'Carry Flag (CY) - Overflow baller alert', class: 'detail-node' }
+                            ]
+                        },
+                        {
+                            id: 'int8085',
+                            text: 'Interrupts (Baller Alarms)',
+                            class: 'category-node',
+                            children: [
+                                { id: 'int8085d1', text: 'TRAP (Non-maskable) - Ultimate baller emergency', class: 'detail-node' },
+                                { id: 'int8085d2', text: 'RST 7.5 (Maskable) - Skibidi mog interrupt calls', class: 'detail-node' },
+                                { id: 'int8085d3', text: 'RST 6.5 (Maskable) - Skibidi mog interrupt calls', class: 'detail-node' },
+                                { id: 'int8085d4', text: 'RST 5.5 (Maskable) - Skibidi mog interrupt calls', class: 'detail-node' },
+                                { id: 'int8085d5', text: 'INTR (Maskable) - General baller interrupt', class: 'detail-node' }
+                            ]
+                        },
+                        {
+                            id: 'status8085',
+                            text: 'Status Signals (S0, S1, IO/M) - Brainrot Signals',
+                            class: 'category-node',
+                            children: [
+                                { id: 'status8085d1', text: 'IO/M - I/O or Memory baller action?', class: 'detail-node' },
+                                { id: 'status8085d2', text: 'S0, S1 - Machine cycle baller ID', class: 'detail-node' }
+                            ]
+                        },
+                        {
+                            id: 'dma8085',
+                            text: 'DMA Signals - Direct Memory Access, Baller Style',
+                            class: 'category-node',
+                            children: [
+                                { id: 'dma8085d1', text: 'DMA Signals - Direct Memory Access', class: 'detail-node' }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        };
+
+        function generateMindMap(data, root) {
+            const node = document.createElement('div');
+            node.classList.add('tree-node');
+            node.classList.add(data.class ? data.class : 'default-node');
+            node.dataset.nodeId = data.id;
+
+            const header = document.createElement('div');
+            header.classList.add('node-header');
+            header.classList.add(data.class ? data.class : 'default-node');
+            header.addEventListener('click', toggleNode);
+
+            const toggleIcon = document.createElement('span');
+            toggleIcon.classList.add('toggle-icon');
+            toggleIcon.textContent = '+';
+
+            const text = document.createElement('span');
+            text.classList.add('node-text');
+            text.textContent = data.text;
+
+            header.appendChild(toggleIcon);
+            header.appendChild(text);
+            node.appendChild(header);
+
+            const childrenContainer = document.createElement('div');
+            childrenContainer.classList.add('tree-children');
+
+            if (data.children && data.children.length > 0) {
+                data.children.forEach(child => {
+                    generateMindMap(child, childrenContainer);
+                });
+            }
+
+            node.appendChild(childrenContainer);
+            root.appendChild(node);
+        }
+
+        function toggleNode(event) {
+            const header = event.currentTarget;
+            const node = header.parentNode;
+            node.classList.toggle('collapsed');
+
+            const toggleIcon = header.querySelector('.toggle-icon');
+            toggleIcon.textContent = node.classList.contains('collapsed') ? '+' : '-';
+        }
+
+        // Utility function to apply an action to all nodes
+        function applyToAllNodes(action) {
+            document.querySelectorAll('.tree-node').forEach(node => {
+                action(node);
+            });
+        }
+
+        // Expand All function
+        function expandAll() {
+            applyToAllNodes(node => {
+                node.classList.remove('collapsed');
+                const toggleIcon = node.querySelector('.toggle-icon');
+                if (toggleIcon) toggleIcon.textContent = '-';
+            });
+        }
+
+        // Collapse All function
+        function collapseAll() {
+            applyToAllNodes(node => {
+                node.classList.add('collapsed');
+                const toggleIcon = node.querySelector('.toggle-icon');
+                if (toggleIcon) toggleIcon.textContent = '+';
+            });
+        }
+
+        // Reset View function
+        function resetView() {
+            applyToAllNodes(node => {
+                node.classList.remove('collapsed');
+                const toggleIcon = node.querySelector('.toggle-icon');
+                if (toggleIcon) toggleIcon.textContent = '+';
+            });
+            collapseAll(); // Start with all nodes collapsed
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            const mindmapRoot = document.getElementById('mindmap-root');
+            generateMindMap(mindmapData, mindmapRoot);
+
+            // Initially collapse all nodes
+            collapseAll();
+
+            // Set up button event listeners
+            document.getElementById('expand-all').addEventListener('click', expandAll);
+            document.getElementById('collapse-all').addEventListener('click', collapseAll);
+            document.getElementById('reset').addEventListener('click', resetView);
+        });
+
+        // WhatsApp sharing button functionality
+        document.getElementById('whatsapp-share').addEventListener('click', function(e) {
+            e.preventDefault();
+            const message = encodeURIComponent("Check out this awesome mindmap!");
+            const whatsappURL = `https://wa.me/?text=${message}`;
+            window.open(whatsappURL, '_blank');
+        });
+    </script>
+</body>
+</html>
